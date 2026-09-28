@@ -12,9 +12,9 @@ import {
 } from "./api";
 import type { Endpoint } from "./api";
 
-type Props = { token: string; endpoints: Endpoint[]; onUpdated: () => void };
+type Props = { token: string; endpoints: Endpoint[]; latestEventId: string | null; onUpdated: () => void };
 
-export default function ApiTestPanel({ token, endpoints, onUpdated }: Props) {
+export default function ApiTestPanel({ token, endpoints, latestEventId, onUpdated }: Props) {
   const [results, setResults] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState("");
   const [eventId, setEventId] = useState("");
@@ -73,6 +73,11 @@ export default function ApiTestPanel({ token, endpoints, onUpdated }: Props) {
       onUpdated();
       return `${result.created} created, ${result.dispatched} queued`;
     });
+  }
+
+  function useLatestEvent() {
+    if (latestEventId) setEventId(latestEventId);
+    else fail("Event detail", "No event available yet. Run the simulator after Redis is running.");
   }
 
   async function testEvent() {
@@ -143,8 +148,8 @@ export default function ApiTestPanel({ token, endpoints, onUpdated }: Props) {
       </div>
       <div className="event-test">
         <div>
-          <label>Event ID<input value={eventId} onChange={e => setEventId(e.target.value)} placeholder="Paste an event ID or use a recent event" /></label>
-          {eventId && <small className="test-hint">Use the same ID for detail and replay tests.</small>}
+          <label>Event ID<input value={eventId} onChange={e => setEventId(e.target.value)} placeholder="Event UUID (e.g. 550e8400-e29b-41d4-a716-446655440000)" /></label>
+          <div className="test-inline"><button className="ghost" type="button" onClick={useLatestEvent} disabled={!latestEventId}>Use latest event</button>{eventId && <small className="test-hint">Use the same ID for detail and replay tests.</small>}</div>
         </div>
         <button className="ghost" onClick={testEvent} disabled={busy !== ""}>{busy === "Event detail" ? "Testing…" : "Test event detail"}</button>
         <button className="ghost" onClick={testReplay} disabled={busy !== ""}>{busy === "Replay" ? "Testing…" : "Test replay"}</button>

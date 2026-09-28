@@ -138,7 +138,7 @@ function DashboardView({ token, onLogout }: DashboardProps) {
         <Stat label="Dead letter" value={events?.dlq ?? 0} hint="requires review" />
       </section>
       <MetricsPanel token={token} endpoints={endpoints} onUpdated={refresh} />
-      <ApiTestPanel token={token} endpoints={endpoints} onUpdated={refresh} />
+      <ApiTestPanel token={token} endpoints={endpoints} latestEventId={data?.recent_events?.[0]?.id ?? null} onUpdated={refresh} />
       <section className="content-grid">
         <div className="panel"><div className="panel-head"><div><h2>Endpoints</h2><p className="muted">Public ingestion targets managed by your workspace.</p></div></div>
           <form onSubmit={addEndpoint} className="endpoint-form">
