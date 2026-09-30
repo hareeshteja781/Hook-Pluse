@@ -1,29 +1,49 @@
 # Hook Pluse
 
-Event-driven webhook platform built phase-by-phase.
+A full-stack webhook gateway and reliability platform for receiving, processing, delivering, retrying, monitoring, and replaying webhook events.
 
-## Build Phases
+## Features
+- Webhook endpoint management
+- HMAC-SHA256 signature verification
+- Idempotency checks
+- Redis Streams for asynchronous processing
+- Background workers for webhook delivery
+- Timeout handling and exponential backoff retries
+- Dead-Letter Queue (DLQ) support
+- Redis Pub/Sub and WebSockets for real-time updates
+- Event inspection and replay with Monaco Editor
+- Delivery history and event monitoring
 
-1. Project structure + initial files
-2. Environment + Docker + PostgreSQL + Redis
-3. Backend foundation + database + authentication
-4. Webhook ingestion + HMAC + idempotency
-5. Redis Streams + background worker + delivery
-6. Retry + exponential backoff + DLQ
-7. React frontend + dashboard
-8. WebSockets + real-time events
-9. Event Inspector + Monaco + Replay
-10. Metrics + simulator
-11. Testing + CI/CD + security
-12. Final integration + deployment verification
+## Tech Stack
+- Backend: Python, FastAPI, SQLAlchemy, PostgreSQL
+- Frontend: React, TypeScript, Vite, React Router
+- Messaging: Redis, Redis Streams, Redis Pub/Sub
+- Editor: Monaco Editor
+- Infrastructure: Docker
 
-## Repository Layout
+## Architecture
+```text
+frontend/   React + TypeScript application
+backend/    FastAPI API and application services
+worker/     Background event processing
+docs/       Project documentation
+scripts/    Local development and test utilities
+infra/      Infrastructure configuration
+```
 
-- backend/ — FastAPI API and application services
-- worker/ — Background event processing worker
-- frontend/ — React web application
-- docs/ — Architecture and project documentation
-- scripts/ — Local development and maintenance scripts
-- infra/ — Infrastructure-related configuration
+PostgreSQL stores application and delivery data. Redis provides asynchronous event processing and real-time messaging.
 
-Each phase should leave the project in a runnable and verifiable state before the next phase begins.
+## Run Locally
+```bash
+docker compose up -d
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+In another terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
